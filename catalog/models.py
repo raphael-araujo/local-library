@@ -51,7 +51,13 @@ class Book(models.Model):
     def get_absolute_url(self):
         """Retorna a URL para acessar um registro de detalhes para este livro"""
         return reverse('book-detail', args=[str(self.id)])
-
+    
+    def display_genre(self):
+        """Cria uma string para o gênero. Isso é necessário para mostrar o gênero no model localizado em Admin.py"""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+    
+    display_genre.short_description = 'Genre'
+    
 
 class BookInstance(models.Model):
     """Modelo representando uma cópia específica de um livro (ex: que pode ser pego emprestado da biblioteca)."""
