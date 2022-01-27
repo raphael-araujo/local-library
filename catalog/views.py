@@ -43,8 +43,42 @@ class BookListView(generic.ListView):
     context_object_name = 'book_list'  # <- variável de template
     queryset = Book.objects.filter(title__icontains='Livro')[:5]  # Pega 5 livros que contém no título a palavra 'Outro'
     template_name = 'books/book_list.html'  # Especifica o nome/localização do template
-    paginate_by = 3
+    paginate_by = 10
 
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 10
+
+
+# class AuthorDetailView(generic.DetailView): (Irei tentar depois)
+#     model = Book
+    # pk_url_kwarg = Author.pk
+    # books = Book.objects.all()
+    # authors = Author.objects.all()
+    # context_object_name = 'books'
+    # extra_context = {'books': books}
+    # queryset = Book.objects.all()
+    # template_name = 'catalog/author_detail.html'  # Especifica o nome/localização do template
+
+
+# class BookInstanceDetailView(generic.DetailView):
+#     model = BookInstance
+#     template_name = 'catalog/author_detail.html'  # Especifica o nome/localização do template
+
+
+def author_detail_view(request, pk):
+    authors = Author.objects.filter(pk=pk)
+    books = Book.objects.filter(author=pk).order_by('title')
+    # book_titles = Book.title
+    instances = BookInstance.objects.filter(book__author__id=pk)
+    context = {
+        'authors': authors,
+        'books': books,
+        'instances': instances
+    }
+    return render(request, 'catalog/author_detail.html', context)
