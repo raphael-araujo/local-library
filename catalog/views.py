@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
@@ -24,6 +25,10 @@ def index(request):
     # O 'all()' fica implícito como padrão.
     num_authors = Author.objects.count()
     
+    #  Número de visitas para esta view, é contado na variável session:
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+    
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
@@ -31,7 +36,8 @@ def index(request):
         'num_authors': num_authors,
         'num_genres': num_genres,
         'word': word,
-        'filter_books_by': filter_books_by
+        'filter_books_by': filter_books_by,
+        'num_visits': num_visits
     }
     
     # Renderiza o template HTML (index.html) com os dados da variável 'context':
@@ -74,7 +80,6 @@ class AuthorListView(generic.ListView):
 def author_detail_view(request, pk):
     authors = Author.objects.filter(pk=pk)
     books = Book.objects.filter(author=pk).order_by('title')
-    # book_titles = Book.title
     instances = BookInstance.objects.filter(book__author__id=pk)
     context = {
         'authors': authors,
@@ -82,3 +87,27 @@ def author_detail_view(request, pk):
         'instances': instances
     }
     return render(request, 'catalog/author_detail.html', context)
+
+
+# Para criar usuários:
+# from django.contrib.auth.models import User
+#
+# # Create user and save to the database
+# user = User.objects.create_user('myusername', 'myemail@crazymail.com', 'mypassword')
+#
+# # Update fields and then save again
+# user.first_name = 'John'
+# user.last_name = 'Citizen'
+# user.save()
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """Genérica class-based view que lista os livros emprestados para o usuário atual."""
+    
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+    

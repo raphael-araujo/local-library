@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse  # Usado para gerar URLs revertendo os padrões de URL.
+from django.contrib.auth.models import User
+from datetime import date
 import uuid  # Necessário para gerar instâncias únicas de livros (id em BookInstance).
 
 # Create your models here.
@@ -69,6 +71,7 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     LOAN_STATUS = (
         ('m', 'Maintenance'),
@@ -76,7 +79,7 @@ class BookInstance(models.Model):
         ('a', 'Available'),
         ('r', 'Reserved'),
     )
-    
+
     status = models.CharField(
         max_length=1,
         choices=LOAN_STATUS,
@@ -84,13 +87,21 @@ class BookInstance(models.Model):
         default='m',
         help_text='Disponibilidade do livro',
     )
-    
+
     class Meta:
         ordering = ['due_back']
-    
+        permissions = (('can_mark_returned', 'Set book as returned'),)
+
     def __str__(self):
         """String para rebresentar o objeto Model"""
         return f'{self.id} ({self.book.title})'
+
+    @property
+    def is_overdue(self):
+        """Verifica se uma instância está atrasada"""
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
     
     
 class Author(models.Model):
