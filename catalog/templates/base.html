@@ -19,16 +19,24 @@
                     <li><a href="{% url 'books' %}">All books</a></li>
                     <li><a href="{% url 'authors' %}">All authors</a></li>
                 </ul>
-              <ul class="sidebar-nav">
-                ...
-
-                {% if user.is_authenticated %}
-                    <li>User: {{ user.get_username }}</li>
-                    <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
-                    <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-                {% endif %}
+                <hr>
+                <ul class="sidebar-nav">
+                
+                    {% if user.is_authenticated %}
+                        <li>User: {{ user.get_username }}</li>
+                        <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
+                        <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+                    {% endif %}
+                </ul>
+                <hr>
+                <ul class="sidebar-nav">
+                    
+                    {% if user.is_staff %}
+                        <li>Staff</li>
+                        <li><a href="{% url 'borrowed-books' %}">All Borrowed</a></li>
+                    {% endif %}
                 </ul>
             
             {% endblock %}
