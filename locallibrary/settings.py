@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
 import os.path
 from pathlib import Path
 
@@ -20,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cdmv6en3n6m73ynvsa=jd*id8bf5da-5x#tgwj3^)gv)(_tale'
+# SECRET_KEY = 'django-insecure-cdmv6en3n6m73ynvsa=jd*id8bf5da-5x#tgwj3^)gv)(_tale'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cdmv6en3n6m73ynvsa=jd*id8bf5da-5x#tgwj3^)gv)(_tale')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -49,6 +52,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
 
 SESSION_SAVE_EVERY_REQUEST = True
 
