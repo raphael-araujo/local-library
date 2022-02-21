@@ -24,7 +24,7 @@ class RenewBookForm(forms.Form):
         return data
 
 
-# ModelForm:
+# exemplo de ModelForm:
 # class RenewBookModelForm(ModelForm):
 #     def clean_due_back(self):
 #         data = self.cleaned_data['due_back']
