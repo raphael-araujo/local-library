@@ -70,11 +70,10 @@ class AuthorListView(generic.ListView):
 def author_detail_view(request, pk):
     authors = Author.objects.filter(pk=pk)
     books = Book.objects.filter(author=pk).order_by('title')
-    instances = BookInstance.objects.filter(book__author__id=pk)
+    # instances = BookInstance.objects.filter(book__author__id=pk)
     context = {
         'authors': authors,
         'books': books,
-        'instances': instances
     }
     return render(request, 'catalog/author_detail.html', context)
 
