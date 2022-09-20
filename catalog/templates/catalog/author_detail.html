@@ -12,22 +12,16 @@
     <h1>Author:
         {% for author in authors %}
             {{ author.last_name }}, {{ author.first_name }}
-        {% endfor %}
     </h1>
     <p >
-        {% for author in authors %}
             {{author.date_of_birth}} {% if author.date_of_death %} - {{ author.date_of_death }} {% endif %}
         {% endfor %}
     </p>
-<!--    {{ instances.count }}-->
+
     <h3><strong>Books</strong></h3>
     {% for book in books %}
         <strong><a href="{% url 'book-detail' book.pk %}">{{ book }}</a>
-                {% for instance in instances %}
-                    {% if instance.book == book %}
-                        {{ instance.count }}*
-                    {% endif %}
-                {% endfor %}
+                    ({{book.bookinstance_set.all.count}})
         </strong>
         <p align="justify">{{ book.summary }}</p>
     {% endfor %}
