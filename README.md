@@ -29,7 +29,7 @@ Projeto básico de um site para gerenciar livros de uma biblioteca local.
 
 ## <div id="funcionalidades">✨ Funcionalidades</div>
 
-✔️ Sistema de Login/Logout
+✔️ Sistema de Login/Logout\
 ✔️ Recuperação de senha via E-mail
 <!-- ✔️ Cadastro de usuários\ -->
 <!-- ✔️ Ativação de conta via E-mail -->
