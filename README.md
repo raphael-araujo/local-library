@@ -40,6 +40,7 @@ As seguintes ferramentas foram utilizadas na construção do projeto:
 
 - [Python](https://www.python.org/)
 - [Django](https://www.djangoproject.com/)
+- [SQLite](https://www.sqlite.org/index.html)
 
 
 ## <div id="pre-requisitos">✅ Pré-requisitos</div>
@@ -53,7 +54,7 @@ Antes de começar, você precisa ter o [Python](https://www.python.org/downloads
 
 ```bash
 # Clone este repositório
-$ git clone https://github.com/Raphael120/local-library
+$ git clone https://github.com/raphael-araujo/local-library
 
 # Entre na pasta
 $ cd local-library
